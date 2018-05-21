@@ -1,0 +1,62 @@
+Don't just REST in HTTP, but gRPC
+
+19 May 2018
+
+Dinesh Kumar
+Product Engineer, Gojek
+
+https://github.com/devdinu
+
+@devdineshkumar
+
+* gRPC
+- gRPC Remote Procedure Call
+- Enables client and server to communicate transparently
+
+* gRPC why?
+- low latency, highly scalable, distributed systems.
+- developing mobile clients, efficient and language independent.
+- Faq [[https://grpc.io/faq/][faq]]
+- Supports C++, Java (incl. support for Android), Objective-C (for iOS), Python, Ruby, Go, C#, Node.js are in GA and follow semantic versioning. Dart (beta)
+
+* Protobuf
+- compressed, much smaller than JSON payload
+- no encoding/decoding in gRPC with protobuf
+    message Idea {
+        User user_id = 1;
+        string title = 2;
+        string description = 3;
+    }
+
+* Encoding 
+- varints (smaller number takes smaller bytes), LSB first
+    1010 1100 0000 0010 (300)
+    0000 0001 (1)
+- key (field number), value pairs. (refer .proto file for type), len information
+- Skip unknown fields (backward compatible)
+.link https://developers.google.com/protocol-buffers/docs/encoding protocol buffer encoding
+
+* gRPC
+- stream
+  - server streaming
+  - client streaming
+- bidirectional streaming
+- unary
+
+* Usecase
+- get rid of polling
+- server push (config changes) live reload
+
+
+* watchout
+- can't decode what you send
+- need client / have to have a bridge
+- load balancing (envoy)
+- server push - open TCP connections
+
+* Resources
+.link https://husobee.github.io/golang/rest/grpc/2016/05/28/golang-rest-v-grpc.html Rest Vs gRPC
+.link https://grpc.io/docs/guides/concepts.html gRPC concepts
+.link https://grpc.io/blog/loadbalancing load balancing
+
+* Thanks

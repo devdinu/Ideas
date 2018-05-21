@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	fmt "fmt"
 	"net"
 	"os"
@@ -12,18 +13,18 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-func startGRPCServer() {
+func startGRPCServer(port int) {
 	stop := make(chan os.Signal, 2)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
-	listen, err := net.Listen("tcp", ":9988")
+	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		panic(err)
 	}
 	server := grpc.NewServer()
 	ideas.RegisterCoolIdeasServer(server, &ideas.Service{})
 	reflection.Register(server)
-	fmt.Println("grpc server: listening on %s", "9988")
+	fmt.Printf("grpc server: listening on %s\n", "9988")
 	go func() {
 		if err := server.Serve(listen); err != nil {
 			panic(err)
@@ -36,5 +37,8 @@ func startGRPCServer() {
 }
 
 func main() {
-	startGRPCServer()
+	port := flag.Int("port", 9988, "port for server to listen")
+	flag.Parse()
+
+	startGRPCServer(*port)
 }

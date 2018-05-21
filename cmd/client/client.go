@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 
@@ -10,7 +11,15 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial("localhost:9988", grpc.WithInsecure())
+	port := flag.Int("port", 9988, "port for server to listen")
+	host := flag.String("host", "localhost", "host for server to listen")
+	flag.Parse()
+
+	makeCall(*host, *port)
+}
+
+func makeCall(host string, port int) {
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", host, port), grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("conn problem", err)
 	}
