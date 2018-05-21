@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "github.com/devdinu/ideas";
+
+package ideas;
+
+message Idea {
+    User user_id = 1;
+    string title = 2;
+    string description = 3;
+}
+
+message User {
+    uint64 id = 1;
+}
+
+service CoolIdeas {
+    rpc SubmitIdea(Idea) returns (IdeaResponse) {}
+    rpc GetIdeas(User) returns (Ideas) {}
+}
+
+message Ideas {
+    repeated Idea ideas = 1;
+}
+
+message IdeaResponse {
+    uint64 id = 1 ;
+}
